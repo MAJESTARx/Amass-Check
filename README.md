@@ -4,7 +4,9 @@ Direkt amass çıktısını baştan sona kopyalayın ve bir txt dosyasına kayı
 İşlemler bitimce otomatik olarak sonuçları output.txt olarak scriptin bulunduğu dizine kayıt edecektir.
 
 
-# Gereksinimler: 
+# Gereksinimler auto yüklenmesi için aşağıdaki komutu girin (If you want install as auto Requirements write this command): pip install -r requirements.txt
+
+# Gereksinimleri manuel yüklemek için (Install manual requirements):
 pip install requests
 pip install tkinterdnd2
 pip install tkinter
