@@ -13,3 +13,6 @@ pip install requests
 pip install tkinterdnd2
 pip install tk
 
+
+Bu araç arkaplanda 50 işlem birden yapıyor. 
+Bu nedenle işlemleri olabildiğince hızlı bir şekilde gerçekleştiriyor
