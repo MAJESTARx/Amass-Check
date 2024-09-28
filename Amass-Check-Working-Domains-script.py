@@ -17,13 +17,16 @@ class SubdomainChecker:
         self.textbox = tk.Text(master, height=40, width=120, font=("Arial", 12))
         self.textbox.pack(pady=10)
 
+        self.result_count_label = tk.Label(master, text="Ayıklanan URL: 0", font=("Arial", 12))
+        self.result_count_label.pack(pady=5)
+
         self.check_button = tk.Button(master, text="Kontrol Et", command=self.start_check)
         self.check_button.pack(pady=5)
 
         self.output_button = tk.Button(master, text="Çıktıyı Kaydet", command=self.save_output)
         self.output_button.pack(pady=5)
 
-        self.results = []
+        self.results = set()  # Set kullanarak tekrarlanan URL'leri önle
         self.exclude_keywords = ["cloudflare", "azure", "cdn", "netblock", "cname", "amazonaws", "awsdns"]
 
         self.textbox.drop_target_register(DND_FILES)
@@ -35,6 +38,8 @@ class SubdomainChecker:
 
         self.signature_label = tk.Label(master, text="MAJESTAR TARAFINDAN OLUŞTURULDU", font=("Arial", 10, "italic"), fg="blue")
         self.signature_label.pack(pady=5)
+
+        self.url_count = 0
 
     def on_drop(self, event):
         file_path = event.data.strip('{}')
@@ -50,7 +55,9 @@ class SubdomainChecker:
             messagebox.showerror("Hata", f"Dosya yüklenirken hata oluştu: {str(e)}")
 
     def start_check(self):
-        self.results = []
+        self.results.clear()  # Önceki sonuçları temizle
+        self.url_count = 0
+        self.result_count_label.config(text="Ayıklanan URL: 0")
         input_text = self.textbox.get(1.0, tk.END).strip()
 
         if not input_text:
@@ -86,8 +93,11 @@ class SubdomainChecker:
         try:
             response = requests.get(https_url, timeout=10)
             if response.status_code in (200, 301):
-                self.results.append(https_url)
-                self.master.after(0, self.display_result, https_url, "200 OK", "green")
+                if https_url not in self.results:
+                    self.results.add(https_url)
+                    self.url_count += 1
+                    self.master.after(0, self.display_result, https_url, "200 OK", "green")
+                    self.master.after(0, self.update_count)
                 return
         except requests.RequestException:
             self.master.after(0, self.display_result, https_url, "Hata", "red")
@@ -95,8 +105,11 @@ class SubdomainChecker:
         try:
             response = requests.get(http_url, timeout=10)
             if response.status_code in (200, 301):
-                self.results.append(http_url)
-                self.master.after(0, self.display_result, http_url, "200 OK", "green")
+                if http_url not in self.results:
+                    self.results.add(http_url)
+                    self.url_count += 1
+                    self.master.after(0, self.display_result, http_url, "200 OK", "green")
+                    self.master.after(0, self.update_count)
         except requests.RequestException:
             self.master.after(0, self.display_result, http_url, "Hata", "red")
 
@@ -107,6 +120,9 @@ class SubdomainChecker:
         else:
             self.textbox.insert(tk.END, status + "\n", "red")
         self.textbox.see(tk.END)
+
+    def update_count(self):
+        self.result_count_label.config(text=f"Ayıklanan URL: {self.url_count}")
 
     def final_message(self):
         self.textbox.insert(tk.END, "\nTüm işlemler bitti, çıktı kaydedildi.\n")
