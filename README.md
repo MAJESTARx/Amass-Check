@@ -15,4 +15,6 @@ pip install tkinterdnd2
 pip install tk
 
 
+BU UYGULAMA MAJESTAR TARAFINDAN OLUŞTURULMUŞTUR
+
 
