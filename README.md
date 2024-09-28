@@ -11,5 +11,5 @@ pip install -r requirements.txt
 # Gereksinimleri manuel yüklemek için (Install manual requirements):
 pip install requests
 pip install tkinterdnd2
-pip install tkinter
+pip install tk
 
