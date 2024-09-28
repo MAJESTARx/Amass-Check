@@ -18,7 +18,7 @@ class SubdomainChecker:
         self.textbox = tk.Text(master, height=30, width=100, font=("Arial", 12))
         self.textbox.pack(pady=10)
 
-        self.result_count_label = tk.Label(master, text="Ayıklanan URL: 0", font=("Arial", 12))
+        self.result_count_label = tk.Label(master, text="Çalışan Domainler: 0", font=("Arial", 12))
         self.result_count_label.pack(pady=5)
 
         self.redirect_var = IntVar()
@@ -78,7 +78,7 @@ class SubdomainChecker:
         self.results.clear()
         self.redirect_results.clear()
         self.url_count = 0
-        self.result_count_label.config(text="Ayıklanan URL: 0")
+        self.result_count_label.config(text="Çalışan Domainler: 0")
         self.label.config(text="İşlem Başladı Lütfen Bekleyin", fg="red")
 
         input_text = self.textbox.get(1.0, tk.END).strip()
@@ -143,7 +143,7 @@ class SubdomainChecker:
             self.master.after(0, self.display_result, http_url, "Hata", "red")
 
     def display_result(self, url, status, color):
-        self.textbox.insert(tk.END, f"{url} --> ")
+        self.textbox.insert(tk.END, f"{url} - - > ")
         if color == "green":
             self.textbox.insert(tk.END, status + "\n", "green")
         elif color == "blue":
@@ -153,7 +153,7 @@ class SubdomainChecker:
         self.textbox.see(tk.END)
 
     def update_count(self):
-        self.result_count_label.config(text=f"Ayıklanan URL: {self.url_count}")
+        self.result_count_label.config(text=f"Çalışan Domainler: {self.url_count}")
 
     def final_message(self):
         self.textbox.insert(tk.END, "\nTüm işlemler bitti, çıktı kaydedildi.\n")
